@@ -23,17 +23,56 @@ describe("quilt", () => {
       program.programId
     )
 
-    await program.methods.createUser("First Account","Data for first account")
+    try{
+      let account = await program.account.point.fetch(pointPDA)
+      console.log("already exist : ",account)
+    }catch(err){
+      
+    await program.methods.createUser("First user","Second user")
     .accounts({
       user:wallet.publicKey,
       point: pointPDA
     })
     .rpc()
 
-    const account = await program.account.point.fetch(pointPDA)
+    let account = await program.account.point.fetch(pointPDA)
     console.log(account)
+    }
   })
 
+  it("update the data",async() =>{
+
+      let [accountPDA,_] = await PublicKey.findProgramAddress([
+        anchor.utils.bytes.utf8.encode("point"),
+        wallet.publicKey.toBuffer()
+      ],program.programId)
+      let account : any
+
+      account = await program.account.point.fetch(accountPDA)
+      console.log("old data",account)
+
+      await program.methods.updateUser("first user updated","second user updated")
+
+      account = await program.account.point.fetch(accountPDA)
+      console.log("updated data",account)
+  })
+
+  it("update the one data ",async() =>{
+
+    let [accountPDA,_] = await PublicKey.findProgramAddress([
+      anchor.utils.bytes.utf8.encode("point"),
+      wallet.publicKey.toBuffer()
+    ],program.programId)
+    let account : any
+
+    account = await program.account.point.fetch(accountPDA)
+    console.log("old data",account)
+
+    await program.methods.updateOne("first user updated third time")
+
+    account = await program.account.point.fetch(accountPDA)
+    console.log("updated data",account)
+})
   // it("set data", async () => {
   //   // Add your test here.
   //   const tx = await program.methods.setData(new anchor.BN("45"))

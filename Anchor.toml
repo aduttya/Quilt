@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.devnet]
-quilt = "6KxyJHxLPmrwnCb2fqVb37ufwAUZWL6g4CNQPJ78eX7i"
+quilt = "EuvWCxkypf4LWvmnrSfiyCFdpNJN3bPmGKfkEcVco8SD"
 
 [registry]
 url = "https://api.apr.dev"

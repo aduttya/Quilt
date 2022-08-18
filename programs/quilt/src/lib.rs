@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("6KxyJHxLPmrwnCb2fqVb37ufwAUZWL6g4CNQPJ78eX7i");
+declare_id!("EuvWCxkypf4LWvmnrSfiyCFdpNJN3bPmGKfkEcVco8SD");
 
 #[program]
 mod quilt {
@@ -9,15 +9,28 @@ mod quilt {
                        _x: String,
                       _y : String) -> Result<()> {
         let user = &mut ctx.accounts.point;
-        
-        // if _x.as_bytes().len() > 20000 || _y.as_bytes().len() > 20000 {
-        //     panic!();
-        // }
         user.x = _x;
         user.y = _y;
         user.bump = *ctx.bumps.get("point").unwrap();
         Ok(())
     }
+
+    pub fn update_user(ctx: Context<Updateuser>,
+                _x: String,
+                _y : String
+                ) -> Result<()>{
+                ctx.accounts.point.x = _x;
+                ctx.accounts.point.y = _y;
+                    Ok(())
+                }
+    
+    pub fn update_one(ctx: Context<Updateuser>,
+                    _x: String,
+                    ) -> Result<()>{
+                        let user = &mut ctx.accounts.point;
+                    user.x = _x;
+                        Ok(())
+                    }
 }
 
 
@@ -36,8 +49,9 @@ pub struct UserToKeys<'info>{
     pub system_program : Program<'info,System>,
 }
 #[derive(Accounts)]
-pub struct GetUserDetails<'info> {
-    pub user: Signer<'info>,
+pub struct Updateuser<'info> {
+    pub user : Signer<'info>,
+
     #[account(mut, seeds = [b"point", user.key().as_ref()], bump = point.bump)]
     pub point: Account<'info, Point>,
 }
