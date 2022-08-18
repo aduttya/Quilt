@@ -51,7 +51,10 @@ describe("quilt", () => {
       account = await program.account.point.fetch(accountPDA)
       console.log("old data",account)
 
-      await program.methods.updateUser("first user updated","second user updated")
+      await program.methods.updateUser("first user updated","second user updated").accounts({
+        user:wallet.publicKey,
+        point:accountPDA
+      }).rpc()
 
       account = await program.account.point.fetch(accountPDA)
       console.log("updated data",account)
@@ -68,7 +71,10 @@ describe("quilt", () => {
     account = await program.account.point.fetch(accountPDA)
     console.log("old data",account)
 
-    await program.methods.updateOne("first user updated third time")
+    await program.methods.updateOne("first user updated third time").accounts({
+      user:wallet.publicKey,
+      point:accountPDA
+    }).rpc()
 
     account = await program.account.point.fetch(accountPDA)
     console.log("updated data",account)
@@ -108,3 +114,5 @@ describe("quilt", () => {
 // In our case for 5 user there will be 5 PDA's that will be owned by the program
 // We first need to find the PDA for wallet then fetch the data from the program for it.
 // check above code to see it.
+
+// https://www.anchor-lang.com/docs/pdas

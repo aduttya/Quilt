@@ -15,7 +15,7 @@ mod quilt {
         Ok(())
     }
 
-    pub fn update_user(ctx: Context<Updateuser>,
+    pub fn update_user(ctx: Context<Update>,
                 _x: String,
                 _y : String
                 ) -> Result<()>{
@@ -24,7 +24,7 @@ mod quilt {
                     Ok(())
                 }
     
-    pub fn update_one(ctx: Context<Updateuser>,
+    pub fn update_one(ctx: Context<Update>,
                     _x: String,
                     ) -> Result<()>{
                         let user = &mut ctx.accounts.point;
@@ -48,8 +48,9 @@ pub struct UserToKeys<'info>{
     pub point : Account<'info,Point>,
     pub system_program : Program<'info,System>,
 }
+
 #[derive(Accounts)]
-pub struct Updateuser<'info> {
+pub struct Update<'info> {
     pub user : Signer<'info>,
 
     #[account(mut, seeds = [b"point", user.key().as_ref()], bump = point.bump)]
