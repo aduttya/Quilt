@@ -1,8 +1,96 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {useState, useEffect} from "react";
+import * as anchor from "@project-serum/anchor";
+import { Program, Provider } from "@project-serum/anchor";
+import { Connection, PublicKey } from '@solana/web3.js'
+import * as web3 from '@solana/web3.js';
+import {Quilt} from "./idl/quilt";
+import idl from "../src/idl.json";
+
+const opts = {
+  preflightCommitment: "processed"
+}
+
+async function connectWallet(){
+
+  const network = "https://solana-devnet.g.alchemy.com/v2/lhsA_fYDYJ8rZYIasrLAgVHRzn0PP-EM";
+  let provider = new Connection(network,opts)
+  let connection = new web3.Connection(network,'confirmed');
+
+  const program = 
+  console.log("connection : ",connection)
+
+  let address = ""
+
+    if(window.solana){
+      let response = await window.solana.connect()
+      console.log('address',response.publicKey.toString())
+      address = response.publicKey
+    }
+
+    console.log("Balance : ",await provider.getBalance(address))
+
+}
+const getProvider = () => {
+  if ('phantom' in window) {
+    const provider = window.phantom?.solana;
+
+    if (provider?.isPhantom) {
+      return provider;
+    }
+  }
+
+  window.open('https://phantom.app/', '_blank');
+};
+
+async function transaction(){
+    console.log("transaction init")
+    
+    
+    const network = "https://solana-devnet.g.alchemy.com/v2/lhsA_fYDYJ8rZYIasrLAgVHRzn0PP-EM";
+    let connection = new web3.Connection(network,'confirmed');
+  
+    let toAccount = new PublicKey('5aFNdKTs6rjLvxQbHv1LT9NvHkzKB4LBbBdj7AvsMHgE')
+    let provider = getProvider()
+    let recentBlockhash = await connection.getLatestBlockhash()
+    const programId = new PublicKey(idl.metadata.address)
+
+    const program = new Program(idl,programId,connection)
+
+    // finding the PDA of account for program
+    const [pointPDA,_] = await PublicKey.findProgramAddress(
+      [
+        anchor.utils.bytes.utf8.encode("point"),
+        provider.publicKey.toBuffer()
+      ],
+      programId
+    )
+
+    try{
+
+
+        let txn = await program.methods.createUser("Ajay","Ajay").accounts({
+          user: provider.publicKey,
+          point : pointPDA
+        })
+        .rpc()
+        
+    }
+    catch(err){
+      console.log(err)
+    }
+    console.log("PDA : ",pointPDA)
+  
+    console.log("transaction ended")
+
+}
+
 
 export default function Home() {
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,43 +101,23 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href="https://nextjs.org">Quilt!</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <div>
+          <div className='conatiner'>
+            <div className='row'>
+              <div className='col-sm'>
+              <button type="button" className="btn btn-primary" onClick={connectWallet}>Connect</button>
+              </div>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+              <div className='col'>
+              <button type="button" className="btn btn-warning" onClick={transaction}>Make Transaction</button>
+              </div>
+            </div>
         </div>
+          </div>
       </main>
 
       <footer className={styles.footer}>

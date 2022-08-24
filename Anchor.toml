@@ -1,11 +1,17 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.devnet]
-quilt = "EuvWCxkypf4LWvmnrSfiyCFdpNJN3bPmGKfkEcVco8SD"
+[programs.localnet]
+quilt = "2MaD7CKRv3cAfYkSDQqFSsySBFmupe3kCs1QUE6dGQ13"
 
 [registry]
-url = "https://api.apr.dev"
+url = "http://127.0.0.1:8899 "
+
+[test]
+startup_wait = 100000
+
+# [workspace]
+# types = "app/pages/idl/"
 
 [provider]
 cluster = "devnet"

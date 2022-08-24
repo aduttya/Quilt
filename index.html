@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>HELLO</h1>
+
+    <button onclick="connectWallet()">Connect</button>
+
+<!-- Development (un-minified) -->
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+
+<!-- Production (minified) -->
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
+    <script >
+    const checkIfWalletIsConnected= async() =>{
+   try{
+
+     const {solana} = window;
+     console.log(solana)
+
+     if(solana){
+       if(solana.isPhantom){
+         console.log("Wallet Found")
+         const response = await solana.connect({onlyIfTrusted: true});
+         
+         console.log("connected with publickey:", response.publicKey.toString());
+
+
+        //  setWalletAddress(response.publicKey.toString());
+
+
+       }
+     }
+     else{
+       console.log("Get a phantom wallet")
+     }
+
+   }
+   catch(error){
+     console.error(error)
+   }
+ };
+
+
+ async function connectWallet(){
+   
+   if(window.solana){
+     const response = await solana.connect()
+     console.log('connect with publicKey', response.publicKey.toString())
+    //  walletAddress(response.publicKey);
+   }
+
+
+ };
+
+
+checkIfWalletIsConnected();
+
+
+
+    </script>
+</body>
+</html>

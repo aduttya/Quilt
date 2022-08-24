@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("EuvWCxkypf4LWvmnrSfiyCFdpNJN3bPmGKfkEcVco8SD");
+declare_id!("2MaD7CKRv3cAfYkSDQqFSsySBFmupe3kCs1QUE6dGQ13");
 
 #[program]
 mod quilt {
@@ -11,6 +11,7 @@ mod quilt {
         let user = &mut ctx.accounts.point;
         user.x = _x;
         user.y = _y;
+        user.authority = *ctx.accounts.authority.key;
         user.bump = *ctx.bumps.get("point").unwrap();
         Ok(())
     }
@@ -19,6 +20,7 @@ mod quilt {
                 _x: String,
                 _y : String
                 ) -> Result<()>{
+                require!(*ctx.accounts.authority.key == ctx.accounts.point.authority,MyErr::NotOwner);
                 ctx.accounts.point.x = _x;
                 ctx.accounts.point.y = _y;
                     Ok(())
@@ -33,16 +35,22 @@ mod quilt {
                     }
 }
 
+#[error_code]
+pub enum MyErr{
+    #[msg("Sender is not the owner")]
+    NotOwner
+}
 
 #[derive(Accounts)]
 pub struct UserToKeys<'info>{
+
     #[account(mut)]
-    pub user :Signer<'info>,
+    authority : Signer<'info>,
 
     #[account(
         init,
-        payer = user,
-        space = 8 + 2 + 4 + 200 + 1, seeds = [b"point", user.key().as_ref()], bump
+        payer = authority,
+        space = 8 + 2 + 4 + 200 + 1, seeds = [b"point", authority.key().as_ref()], bump
     )]
 
     pub point : Account<'info,Point>,
@@ -51,14 +59,15 @@ pub struct UserToKeys<'info>{
 
 #[derive(Accounts)]
 pub struct Update<'info> {
-    pub user : Signer<'info>,
 
-    #[account(mut, seeds = [b"point", user.key().as_ref()], bump = point.bump)]
+    #[account(mut, has_one = authority, seeds = [b"point", authority.key().as_ref()], bump = point.bump)]
     pub point: Account<'info, Point>,
+    pub authority : Signer<'info>
 }
 
 #[account]
 pub struct Point {
+    authority : Pubkey,
     x : String,
     y: String,
     bump : u8,
