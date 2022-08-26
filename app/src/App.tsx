@@ -20,7 +20,7 @@ const App = ()=>{
     <>
     <nav className='container-fluid bg-black'>
       <div className='flex flex-row'>
-        <div className='flex flex-1 py-1'>
+        <div className='text-white flex flex-1 py-1'>
         <h1>Quilt</h1>
         </div>
         <div className='flex float-right py-2'>
