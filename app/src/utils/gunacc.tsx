@@ -4,14 +4,14 @@ import "gun/axe";
 // initialize gun locally
 const gun = Gun({
   peers: [
-    "http://localhost:8765/gun",
+
     "https://gun-manhattan.herokuapp.com/gun",
     "https://quilt-chat.herokuapp.com/gun",
   ],
   localStorage: false,
 });
 //Database
-let client = gun.user().recall({ localStorage: true });
+let client = gun.user().recall({ sessionStorage: true });
 
 async function account() {
   let rand = Math.random().toString();
