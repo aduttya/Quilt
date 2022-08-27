@@ -1,8 +1,8 @@
 const web3 = require("@solana/web3.js")
 
 // get the connection
-const connection = new web3.Connection(web3.clusterApiUrl('mainnet-beta'))
-
+// const connection = new web3.Connection(web3.clusterApiUrl('mainnet-beta'))
+const connection = new web3.Connection('https://solana-mainnet.g.alchemy.com/v2/nwxElf1ZkLWEf6AJeytuBV_2EWyxk3vu')
 
 async function getBalance(address){
 
@@ -58,12 +58,37 @@ async function main(){
 
 }
 
+// async function parseTransaction()
 async function getTransactionHistory(address){
 
     let addr = new web3.PublicKey(address)
 
-    let txns = await connection.getSignaturesForAddress(addr,{limit:10})
-    console.log(txns)
+    let txns = await connection.getSignaturesForAddress(addr,{limit:1})
+    let txnList = txns.map(transaction => transaction.signature)
+    console.log(txnList.length)
+    let txDetails = await connection.getParsedTransactions(txnList)
+    // console.log(txDetails)
+    let accountKeys = txDetails[0].transaction.message
+    let preAccountBalance = txDetails[0].meta.preBalances
+    let postAccountBalance = txDetails[0].meta.postBalances
+   
+    console.log(txDetails)
+    for(let i = 0; i < preAccountBalance.length; ++i){
+        // if(preAccountBalance[i]-postAccountBalance[i] !== 0){
+        console.log(accountKeys.accountKeys[i].pubkey.toString()," ",preAccountBalance[i]/web3.LAMPORTS_PER_SOL,", ",postAccountBalance[i]/web3.LAMPORTS_PER_SOL)
+    // }
+}
+    // txDetails.forEach((transaction,i)=>{
+    //     // console.log(transaction.transaction.message.accountKeys)
+    //     transaction.transaction.message.accountKeys.forEach((obj) =>{
+    //         console.log(obj)
+    //     })
+    //     console.log("Post Balance : ",transaction.meta.postBalances)
+    //     console.log("Pre Balance : ",transaction.meta.preBalances)
+
+    // })
+
+
 }
 
-getTransactionHistory('AH9G5pRhxdD3UARFVD38sT4djAvp8MuMGSbQLwbpM3Bo')
+getTransactionHistory('CnALr1bMBnvvxhjvUJ22Ud2CkkNYe7ZiCuDHuw167zYU')
