@@ -8,7 +8,7 @@ import file from "../assets/file.png";
 import download from "../assets/download.png";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { upload, retrieve, Download } from "./web3";
-const path : any = user
+const path: any = user
   .get("/orbitdb/zdpuB3Hq67P1fd2C6EBVGFH2qT3fCHYwHD1Tv5Rnjx5TW8jN3")
   .get("global");
 
@@ -16,7 +16,7 @@ export default function Chat() {
   const { publicKey, sendTransaction } = useWallet();
   const [acc, setAcc] = useState(false);
   const [display, setDisplay] = useState(false);
-  let account : any = publicKey;
+  let account: any = publicKey;
   const index = getIndex();
 
   async function isAccount() {
@@ -39,13 +39,13 @@ export default function Chat() {
   let show;
   function OpenForm() {
     if (display === false) {
-      let ele:any = document.getElementById("myForm")
+      let ele: any = document.getElementById("myForm")
       ele.style.display = "block";
       setDisplay(true);
       Display();
       setTimeout(scroll, 1000);
-      let input:any = document.getElementById("input");
-      input.addEventListener("keydown", function (e:any) {
+      let input: any = document.getElementById("input");
+      input.addEventListener("keydown", function (e: any) {
         if (e.code === "Enter") {
           globalChat();
         }
@@ -65,7 +65,7 @@ export default function Chat() {
 
   // add msgs to gun
   async function globalChat() {
-    let input : any = document.getElementById("input");
+    let input: any = document.getElementById("input");
     let text;
     if (input.value === "") {
       return;
@@ -90,22 +90,22 @@ export default function Chat() {
 
   //get msgs from gun
   let diff = 1;
-  let Name : any= [],
-    Message :any = [],
-    CreatedAt : any = [],
-    Type : any= [];
+  let Name: any = [],
+    Message: any = [],
+    CreatedAt: any = [],
+    Type: any = [];
 
   //load previous msgs
   function load() {
     let i = index - diff;
-    let msg : any = [],
-      nam : any= [],
-      created :any= [],
-      typ:any = [];
+    let msg: any = [],
+      nam: any = [],
+      created: any = [],
+      typ: any = [];
     path
       .get(i)
       .map()
-      .once(function (data:any, key:any) {
+      .once(function (data: any, key: any) {
         if (data !== undefined) {
           try {
             data = JSON.parse(data);
@@ -130,11 +130,11 @@ export default function Chat() {
     Display();
   }
 
-  function getMsg(index:any) {
+  function getMsg(index: any) {
     path
       .get(index)
       .map()
-      .once(function (data:any, key:any) {
+      .once(function (data: any, key: any) {
         if (data !== undefined) {
           try {
             data = JSON.parse(data);
@@ -155,16 +155,16 @@ export default function Chat() {
 
   //add msgs to html
   const Display = async () => {
-    let ele:any = document.getElementById("txt")
+    let ele: any = document.getElementById("txt")
     ele.innerHTML = "";
     if (Name.length > 0) {
       for (let i = 0; i < Message.length; ++i) {
         let datetime = new Date(CreatedAt[i]);
         if (Type[i] == "txt") {
-          let txtmsg : any = document.createElement("div");
+          let txtmsg: any = document.createElement("div");
           txtmsg.innerHTML = `<h4>${Message[i]}</h4><h6 style="color:grey;">
               ${Name[i]}<br />${datetime}</h6><br/><br/>`;
-            ele = document.getElementById("txt")
+          ele = document.getElementById("txt")
           ele.appendChild(txtmsg);
         } else if (Type[i] == "file") {
           let dwnload = document.createElement("a");
@@ -195,7 +195,7 @@ export default function Chat() {
       <div>
         <img
           src={global}
-          type  = "button"
+
           className="open-button"
           onClick={() => OpenForm()}
           alt=""
