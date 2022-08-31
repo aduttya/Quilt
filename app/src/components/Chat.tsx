@@ -1,4 +1,3 @@
-import { getAccount } from "../utils/wallet";
 import { useState } from "react";
 import global from "../assets/global.png";
 import { user, getIndex } from "../utils/gunacc";
@@ -20,8 +19,8 @@ export default function Chat() {
   const index = getIndex();
 
   async function isAccount() {
-    account = await getAccount();
-    if (account !== "") {
+    account = publicKey;
+    if (publicKey) {
       setAcc(true);
       clearInterval(isLogged);
     }

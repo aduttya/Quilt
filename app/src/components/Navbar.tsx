@@ -13,7 +13,6 @@ const Navbar = () => {
           <img src={logo} width="150px" alt="" />
         </a>
         <div className="d-flex">
-
           {/* TODO 4.b - Call connectWallet function onClick  */}
           <WalletMultiButton/>
         </div>

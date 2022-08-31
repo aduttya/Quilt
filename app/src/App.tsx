@@ -12,6 +12,7 @@ import {
 import { clusterApiUrl } from '@solana/web3.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from "./components/Navbar";
+import Chat from "./components/Chat"
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -28,7 +29,12 @@ const App = ()=>{
         </div>
       </div>
     </nav> */}
-  <NavBar/>
+
+<div className="h-100">
+      <NavBar />
+      <Chat />
+    </div>
+
     </>
   )
 }

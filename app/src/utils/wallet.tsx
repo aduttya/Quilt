@@ -34,3 +34,5 @@ export const getAccount = async() =>{
       return publicKey
     }
 }
+
+export default getAccount;
