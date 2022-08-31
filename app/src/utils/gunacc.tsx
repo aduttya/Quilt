@@ -11,7 +11,8 @@ const gun = Gun({
   localStorage: false,
 });
 //Database
-let client = gun.user().recall({ localStorage: true });
+
+let client = gun.user().recall({ sessionStorage: true });
 
 async function account() {
   let rand = Math.random().toString();

@@ -193,9 +193,8 @@ export default function Chat() {
   } else {
     return (
       <div>
-        <img
+        <img 
           src={global}
-          type  = "button"
           className="open-button"
           onClick={() => OpenForm()}
           alt=""
